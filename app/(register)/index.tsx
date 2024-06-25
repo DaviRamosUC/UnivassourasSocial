@@ -15,15 +15,14 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
-import {} from 'firebase/firestore'
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigation = useNavigation();
-  const database = getDatabase();
+  const db = getFirestore();
   const auth = getAuth();
 
   const handleRegister = () => {
@@ -34,23 +33,20 @@ const RegisterScreen = () => {
     };
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        set(ref(database, 'users/' + user.uid), {
+        await setDoc(doc(db, "users", user.uid), {
           username: name,
           email: email,
-          followers: 0
+          followers: 0,
         }).then((response) => {
-          console.log(response)
-          Alert.alert(
-            "Registro efetuado",
-            "Você foi registrado com sucesso"
-          );
+          console.log(response);
+          Alert.alert("Registro efetuado", "Você foi registrado com sucesso");
           setName("");
           setEmail("");
           setPassword("");
-          // navigation.navigate('(tabs)');
+          navigation.navigate('(tabs)');
         });
       })
       .catch((error) => {

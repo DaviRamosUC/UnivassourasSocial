@@ -13,7 +13,6 @@ import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -21,23 +20,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("ifbadavi@gmail.com");
   const [password, setPassword] = useState("123456");
   const navigation = useNavigation();
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
 
-        if (token) {
-          setTimeout(() => {
-            // navigation.navigate("Main");
-          }, 400);
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    checkLoginStatus();
-  }, []);
   const handleLogin = () => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
@@ -48,6 +31,7 @@ const LoginScreen = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        Alert.alert("Login não efetuado efetuado", "Algo deu errado");
       });
 
   };

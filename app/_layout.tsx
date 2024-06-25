@@ -8,12 +8,13 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { initializeApp } from "firebase/app";
 //@ts-ignore
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 
 const firebaseConfig = {
   apiKey: "",
   authDomain: "",
+  databaseURL: "",
   projectId: "",
   storageBucket: "",
   messagingSenderId: "",
@@ -26,6 +27,8 @@ export const app = initializeApp(firebaseConfig);
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+
+export const db = getFirestore(app)
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
