@@ -7,33 +7,34 @@ import {
   TextInput,
   Button,
 } from "react-native";
-import React, { useState, useContext } from "react";
-
-import axios from "axios";
+import React, { useState } from "react";
+import { getAuth } from "firebase/auth";
+import { getFirestore, addDoc, collection } from "firebase/firestore";
 
 const ThreadsScreen = () => {
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
   const [content, setContent] = useState("");
-  const handlePostSubmit = () => {
-    const postData = {
-      userId,
-    };
-
-    if (content) {
-      postData.content = content;
-    }
-
-    axios
-      .post("http://localhost:3000/create-post", postData)
-      .then((response) => {
-        setContent("");
-      })
-      .catch((error) => {
-        console.log("error creating post", error);
-      });
+  const db = getFirestore();
+  const auth = getAuth();
+  
+  const handlePostSubmit = async () => {
+    setUserId(auth.currentUser!.uid);
+    setUserName(auth.currentUser!.displayName);
+    await addDoc(collection(db, "posts"), {
+      comments: "",
+      content: content,
+      image: '',
+      likes: 0,
+      user: {
+        name: userName,
+        id: userId
+      }
+    });
   };
+
   return (
-    <SafeAreaView style={{ padding: 10 }}>
+    <SafeAreaView style={{ paddingHorizontal: 10, paddingVertical: 30 }}>
       <View
         style={{
           flexDirection: "row",
@@ -54,7 +55,7 @@ const ThreadsScreen = () => {
           }}
         />
 
-        <Text>Sujan_Music</Text>
+        <Text>{userName ?? "Username"}</Text>
       </View>
 
       <View style={{ flexDirection: "row", marginLeft: 10 }}>
@@ -62,14 +63,14 @@ const ThreadsScreen = () => {
           value={content}
           onChangeText={(text) => setContent(text)}
           placeholderTextColor={"black"}
-          placeholder="Type your message..."
+          placeholder="O que tem passado na sua mente?"
           multiline
         />
       </View>
 
       <View style={{ marginTop: 20 }} />
 
-      <Button onPress={handlePostSubmit} title="Share Post" />
+      <Button onPress={handlePostSubmit} title="Compartilhar" />
     </SafeAreaView>
   );
 };

@@ -43,7 +43,6 @@ const HomeScreen = () => {
     });
   };
 
-  console.log("posts", posts);
   const handleLike = async (postId) => {};
 
   const handleDislike = async (postId) => {};
@@ -102,21 +101,13 @@ const HomeScreen = () => {
                   marginTop: 15,
                 }}
               >
-                {post?.likes?.includes(userId) ? (
-                  <AntDesign
-                    onPress={() => handleDislike(post?._id)}
-                    name="heart"
-                    size={18}
-                    color="red"
-                  />
-                ) : (
+                
                   <AntDesign
                     onPress={() => handleLike(post?._id)}
                     name="hearto"
                     size={18}
                     color="black"
                   />
-                )}
 
                 <FontAwesome name="comment-o" size={18} color="black" />
 
