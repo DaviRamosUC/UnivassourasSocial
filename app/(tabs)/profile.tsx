@@ -80,20 +80,12 @@ const ProfileScreen = () => {
               }}
             />
           </View>
-
           <View>
-            <Text style={{ fontSize: 15, fontWeight: "400" }}>BTech.</Text>
-            <Text style={{ fontSize: 15, fontWeight: "400" }}>
-              Movie Buff | Musical Nerd
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "400" }}>
-              Love Yourself
+            <Text style={{ color: "gray", fontSize: 15, marginTop: 10 }}>
+            {user?.followers} followers
             </Text>
           </View>
         </View>
-        <Text style={{ color: "gray", fontSize: 15, marginTop: 10 }}>
-          {user?.followers} followers
-        </Text>
         <View
           style={{
             flexDirection: "row",
